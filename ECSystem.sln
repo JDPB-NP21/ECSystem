@@ -1,22 +1,39 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECSystem.Server.Main", "ECSystem.Server.Main\ECSystem.Server.Main.csproj", "{5DF5DB6F-9350-4532-9584-2D18342F9185}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECSystem.Server.Main", "ECSystem.Server.Main\ECSystem.Server.Main.csproj", "{5DF5DB6F-9350-4532-9584-2D18342F9185}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECSystem.Telemetry.Android", "ECSystem.Telemetry\ECSystem.Telemetry.Android\ECSystem.Telemetry.Android.csproj", "{E7AC3F6F-2924-4408-9447-8341264E4706}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECSystem.Telemetry.XForms", "ECSystem.Telemetry\ECSystem.Telemetry.XForms\ECSystem.Telemetry.XForms.csproj", "{A4798ED1-51B1-4F0F-B6DB-696327A4E395}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5DF5DB6F-9350-4532-9584-2D18342F9185}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5DF5DB6F-9350-4532-9584-2D18342F9185}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DF5DB6F-9350-4532-9584-2D18342F9185}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DF5DB6F-9350-4532-9584-2D18342F9185}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7AC3F6F-2924-4408-9447-8341264E4706}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7AC3F6F-2924-4408-9447-8341264E4706}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7AC3F6F-2924-4408-9447-8341264E4706}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E7AC3F6F-2924-4408-9447-8341264E4706}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7AC3F6F-2924-4408-9447-8341264E4706}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7AC3F6F-2924-4408-9447-8341264E4706}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A4798ED1-51B1-4F0F-B6DB-696327A4E395}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4798ED1-51B1-4F0F-B6DB-696327A4E395}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4798ED1-51B1-4F0F-B6DB-696327A4E395}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4798ED1-51B1-4F0F-B6DB-696327A4E395}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2D87F304-1DAE-4E20-977B-F30FF7B381CA}
 	EndGlobalSection
 EndGlobal
