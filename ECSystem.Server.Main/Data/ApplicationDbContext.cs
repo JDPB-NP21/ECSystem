@@ -7,6 +7,9 @@ namespace ECSystem.Server.Main.Data {
             : base(options) {
         }
 
+        DbSet<StaticDevice> staticDevices;
+        DbSet<DeviceLog> deviceLogs;
+
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
         }
