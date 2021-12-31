@@ -14,9 +14,7 @@ namespace ECSystem.Telemetry.Droid.Services {
 
 
     [Service(Exported = true)]
-    internal class MyService : Service {
-
-
+    internal class TelemetryService : Service {
 
         public override void OnCreate() {
             if(false) {
