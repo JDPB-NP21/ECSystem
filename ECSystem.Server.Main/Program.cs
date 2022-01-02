@@ -1,4 +1,7 @@
 using ECSystem.Server.Main.Data;
+using ECSystem.Server.Main.Helpers;
+using ECSystem.Server.Main.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,10 +16,16 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddAuthentication("BasicAuthentication")
+    //.AddJwtBearer(options =>
+    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
 
 builder.Services.AddRazorPages();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<LocationService>();
+builder.Services.AddSingleton<AuthService>();
 
 var app = builder.Build();
 

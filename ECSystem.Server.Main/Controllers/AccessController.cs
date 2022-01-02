@@ -12,5 +12,14 @@ namespace ECSystem.Server.Main.Controllers {
             _context = context;
             _logger = logger;
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetPos(string data) {
+
+            _logger.LogInformation(data.ToString());
+
+            return NoContent();
+        }
     }
 }
