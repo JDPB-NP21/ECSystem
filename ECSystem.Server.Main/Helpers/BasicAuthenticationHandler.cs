@@ -1,4 +1,5 @@
-﻿using ECSystem.Server.Main.Services;
+﻿using ECSystem.Server.Main.Data;
+using ECSystem.Server.Main.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -15,19 +16,22 @@ namespace ECSystem.Server.Main.Helpers {
         private readonly UrlEncoder encoder;
         private readonly ISystemClock clock;
         private readonly AuthService authService;
+        private readonly ApplicationDbContext context;
 
         public BasicAuthenticationHandler(
             IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
-            AuthService authService)
+            AuthService authService,
+            ApplicationDbContext context)
             : base(options, logger, encoder, clock) {
             this.options = options;
             this.logger = logger;
             this.encoder = encoder;
             this.clock = clock;
             this.authService = authService;
+            this.context = context;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync() {
@@ -47,7 +51,7 @@ namespace ECSystem.Server.Main.Helpers {
                 var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
                 var username = credentials[0];
                 var password = credentials[1];
-                user = await authService.Authenticate(username, password);
+                user = await authService.Authenticate(context, username, password);
             } catch {
                 return AuthenticateResult.Fail("Invalid Authorization Header");
             }
