@@ -2,6 +2,7 @@ using ECSystem.Server.Main.Data;
 using ECSystem.Server.Main.Helpers;
 using ECSystem.Server.Main.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => {
     var dbtype = builder.Configuration.GetValue<string>("DBType");
     if (dbtype.Equals("localdb"))
         options.UseSqlServer(connectionString);
-    else if(dbtype.Equals("postgres"))
+    else if (dbtype.Equals("postgres"))
         options.UseNpgsql(connectionString);
 });
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -21,7 +22,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddAuthentication("BasicAuthentication")
+builder.Services.AddAuthentication()
     //.AddJwtBearer(options =>
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
@@ -33,6 +34,12 @@ builder.Services.AddSingleton<LocationService>();
 builder.Services.AddSingleton<AuthService>();
 
 var app = builder.Build();
+
+// Use if reverse proxy is present
+if ((builder.Configuration.GetValue<string>("UseForwardedHeaders")?.Equals("true")).GetValueOrDefault(false))
+    app.UseForwardedHeaders(new ForwardedHeadersOptions {
+        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+    });
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
