@@ -8,12 +8,11 @@ namespace ECSystem.Server.Main.Services {
         private readonly ILogger<AuthService> _logger;
 
         public AuthService(ILogger<AuthService> logger) {
-            //_context = context;
             _logger = logger;
         }
 
-        public async Task<IdentityUser?> Authenticate(ApplicationDbContext _context, string username, string password) {
-
+        public async Task<IdentityUser?> Authenticate(UserManager<IdentityUser> userManager, ApplicationDbContext _context, string username, string password) {
+            //_userManager.GenerateChangeEmailTokenAsync
             return await _context.Users.Where(x => x.NormalizedUserName == username && x.PasswordHash == password).FirstOrDefaultAsync();
         
         

@@ -17,6 +17,7 @@ namespace ECSystem.Server.Main.Helpers {
         private readonly ISystemClock clock;
         private readonly AuthService authService;
         private readonly ApplicationDbContext context;
+        private readonly UserManager<IdentityUser> userManager;
 
         public BasicAuthenticationHandler(
             IOptionsMonitor<AuthenticationSchemeOptions> options,
@@ -24,7 +25,8 @@ namespace ECSystem.Server.Main.Helpers {
             UrlEncoder encoder,
             ISystemClock clock,
             AuthService authService,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            UserManager<IdentityUser> userManager)
             : base(options, logger, encoder, clock) {
             this.options = options;
             this.logger = logger;
@@ -32,6 +34,7 @@ namespace ECSystem.Server.Main.Helpers {
             this.clock = clock;
             this.authService = authService;
             this.context = context;
+            this.userManager = userManager;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync() {
@@ -42,7 +45,7 @@ namespace ECSystem.Server.Main.Helpers {
 
             if (!Request.Headers.ContainsKey("Authorization"))
                 return AuthenticateResult.Fail("Missing Authorization Header");
-
+            
             IdentityUser? user = null;
 
             try {
@@ -51,7 +54,7 @@ namespace ECSystem.Server.Main.Helpers {
                 var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
                 var username = credentials[0];
                 var password = credentials[1];
-                user = await authService.Authenticate(context, username, password);
+                user = await authService.Authenticate(userManager, context, username, password);
             } catch {
                 return AuthenticateResult.Fail("Invalid Authorization Header");
             }
