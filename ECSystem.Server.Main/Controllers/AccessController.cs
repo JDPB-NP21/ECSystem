@@ -14,12 +14,12 @@ namespace ECSystem.Server.Main.Controllers {
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetPos(string data) {
+        [HttpGet("getpos/{userid}")]
+        public async Task<IActionResult> GetPos([FromBody] string userid) {
 
-            _logger.LogInformation(data.ToString());
+            _logger.LogInformation(userid.ToString());
 
-            return NoContent();
+            return base.Ok();
         }
     }
 }

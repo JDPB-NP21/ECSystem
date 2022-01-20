@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace ECSystem.Server.Main.Data {
     public class LocationDevice {
         [Key]
-        public int Id { get; set; } = default!;
-        //public Location Location { get; set; } = default!;
+        public ulong Id { get; set; } = default!;
+        public LocationData Location { get; set; } = default!;
     }
 }

@@ -7,8 +7,8 @@ namespace ECSystem.Server.Main.Data {
             : base(options) {
         }
 
-        public virtual DbSet<LocationDevice> staticDevices { get; set; }
-        public virtual DbSet<DeviceLogs> deviceLogs { get; set; }
+        public virtual DbSet<LocationDevice> StaticDevices { get; set; }
+        public virtual DbSet<DeviceLogs> DeviceLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);

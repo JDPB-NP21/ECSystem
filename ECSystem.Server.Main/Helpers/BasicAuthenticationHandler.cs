@@ -18,6 +18,7 @@ namespace ECSystem.Server.Main.Helpers {
         private readonly AuthService authService;
         private readonly ApplicationDbContext context;
         private readonly UserManager<IdentityUser> userManager;
+        private readonly IUserClaimsPrincipalFactory<IdentityUser> userClaimsPrincipalFactory;
 
         public BasicAuthenticationHandler(
             IOptionsMonitor<AuthenticationSchemeOptions> options,
@@ -26,7 +27,8 @@ namespace ECSystem.Server.Main.Helpers {
             ISystemClock clock,
             AuthService authService,
             ApplicationDbContext context,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            IUserClaimsPrincipalFactory<IdentityUser> userClaimsPrincipalFactory)
             : base(options, logger, encoder, clock) {
             this.options = options;
             this.logger = logger;
@@ -35,6 +37,7 @@ namespace ECSystem.Server.Main.Helpers {
             this.authService = authService;
             this.context = context;
             this.userManager = userManager;
+            this.userClaimsPrincipalFactory = userClaimsPrincipalFactory;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync() {
@@ -54,7 +57,9 @@ namespace ECSystem.Server.Main.Helpers {
                 var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
                 var username = credentials[0];
                 var password = credentials[1];
-                user = await authService.Authenticate(userManager, context, username, password);
+
+                user = await userManager.FindByNameAsync(username);
+                
             } catch {
                 return AuthenticateResult.Fail("Invalid Authorization Header");
             }
@@ -62,13 +67,8 @@ namespace ECSystem.Server.Main.Helpers {
             if (user == null)
                 return AuthenticateResult.Fail("Invalid Username or Password");
 
-            var claims = new[] {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName),
-            };
-            var identity = new ClaimsIdentity(claims, Scheme.Name);
-            var principal = new ClaimsPrincipal(identity);
-            var ticket = new AuthenticationTicket(principal, Scheme.Name);
+            var claimsPrincipal = await userClaimsPrincipalFactory.CreateAsync(user);
+            var ticket = new AuthenticationTicket(claimsPrincipal, Scheme.Name);
 
             return AuthenticateResult.Success(ticket);
         }
