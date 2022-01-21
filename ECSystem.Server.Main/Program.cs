@@ -34,7 +34,7 @@ builder.Services.AddSingleton<AuthService>();
 var app = builder.Build();
 
 // Use if reverse proxy is present
-if ((builder.Configuration.GetValue<string>("UseForwardedHeaders")?.Equals("true")).GetValueOrDefault(false))
+if ((builder.Configuration.GetValue<string>("UseForwardedHeaders")?.Equals("1")).GetValueOrDefault(false))
     app.UseForwardedHeaders(new ForwardedHeadersOptions {
         ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
     });
@@ -58,8 +58,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
-app.MapGrpcService<GreeterService>();
+//var grpcHost = builder.Configuration.GetValue<string>("GrpcHost") ?? "";
+app.MapGrpcService<GreeterService>().RequireHost("127.0.0.1:8085");
 app.MapControllers();
 app.MapRazorPages();
 
