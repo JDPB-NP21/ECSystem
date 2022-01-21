@@ -1,3 +1,4 @@
+using ECSystem.Server.Main.Controllers;
 using ECSystem.Server.Main.Data;
 using ECSystem.Server.Main.Helpers;
 using ECSystem.Server.Main.Services;
@@ -23,6 +24,7 @@ builder.Services.AddAuthentication()
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
 
+builder.Services.AddGrpc();
 builder.Services.AddRazorPages();
 builder.Services.AddSwaggerGen();
 
@@ -57,6 +59,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
+app.MapGrpcService<GreeterService>();
 app.MapControllers();
 app.MapRazorPages();
 
