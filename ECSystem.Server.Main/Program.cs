@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<LocationService>();
 builder.Services.AddSingleton<AuthService>();
 
+
+//builder.WebHost.UseKestrel(so => {
+//    so.ListenLocalhost(8081, op => op.Protocols = HttpProtocols.Http1AndHttp2);
+//    so.ListenLocalhost(8085, op => op.Protocols = HttpProtocols.Http2);
+//});
+
 var app = builder.Build();
 
 // Use if reverse proxy is present
@@ -47,10 +54,10 @@ if (app.Environment.IsDevelopment()) {
 } else {
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    //app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -59,7 +66,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 //var grpcHost = builder.Configuration.GetValue<string>("GrpcHost") ?? "";
-app.MapGrpcService<GreeterService>().RequireHost("127.0.0.1:8085");
+app.MapGrpcService<GreeterService>();
 app.MapControllers();
 app.MapRazorPages();
 
