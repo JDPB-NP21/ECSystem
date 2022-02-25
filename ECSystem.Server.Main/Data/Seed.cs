@@ -14,30 +14,27 @@ namespace ECSystem.Server.Main.Data {
                     return;
                 }
                 
-
-                var adminUser = new IdentityUser("admin") {
+                //User creation
+                var result = await userManager.CreateAsync(new IdentityUser("admin") {
                     EmailConfirmed = true,
-                };
-                var result = await userManager.CreateAsync(adminUser);
+                }, "admin");
 
                 if (!result.Succeeded)
-                    throw new Exception("Failded creating admin user");
+                    throw new Exception(result.Errors.First().Code);
 
-                //admin-admin 
-                await userManager.AddPasswordAsync(adminUser, "admin");
+                //Role creation
+                var resultRole = await roleManager.CreateAsync(new IdentityRole("Administrator"));
 
-                var adminRole = new IdentityRole("Administrator");
-                var resultRole = await roleManager.CreateAsync(adminRole);
-                if (!result.Succeeded)
+                if (!resultRole.Succeeded)
                     throw new Exception("Failded creating admin role");
 
-                adminUser = await userManager.FindByNameAsync("admin");
+
+                var adminUser = await userManager.FindByNameAsync("admin");
                 await userManager.AddToRoleAsync(adminUser, "Administrator");
 
-                await roleManager.CreateAsync(new IdentityRole("Victim"));
+                await roleManager.CreateAsync(new IdentityRole("TelemetryClient"));
 
-                Console.WriteLine("Done.");
-
+                Console.WriteLine("InitDb Done.");
             }
 
         }

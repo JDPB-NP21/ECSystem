@@ -7,7 +7,7 @@ namespace ECSystem.Server.Main.Data {
         [Key]
         public ulong Id { get; set; } = default!;
         
-        [Column(TypeName = "json")]
-        public LocationData Location { get; set; } = default!;
+        [Column(TypeName = "jsonb")]
+        public Location Location { get; set; } = default!;
     }
 }

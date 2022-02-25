@@ -17,7 +17,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => {
 });
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddDefaultIdentity<IdentityUser>(options => {
+    options.Password.RequiredLength = 1;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireDigit = false;
+    options.SignIn.RequireConfirmedAccount = false;
+})
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -31,13 +38,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<LocationService>();
-builder.Services.AddSingleton<AuthService>();
 
-
-//builder.WebHost.UseKestrel(so => {
-//    so.ListenLocalhost(8081, op => op.Protocols = HttpProtocols.Http1AndHttp2);
-//    so.ListenLocalhost(8085, op => op.Protocols = HttpProtocols.Http2);
-//});
 
 var app = builder.Build();
 
@@ -67,6 +68,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapGrpcService<GreeterService>();
+app.MapGrpcService<TelemetryService>();
 app.MapControllers();
 app.MapRazorPages();
 

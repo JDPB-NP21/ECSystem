@@ -15,7 +15,6 @@ namespace ECSystem.Server.Main.Helpers {
         private readonly ILoggerFactory logger;
         private readonly UrlEncoder encoder;
         private readonly ISystemClock clock;
-        private readonly AuthService authService;
         private readonly ApplicationDbContext context;
         private readonly UserManager<IdentityUser> userManager;
         private readonly IUserClaimsPrincipalFactory<IdentityUser> userClaimsPrincipalFactory;
@@ -25,7 +24,6 @@ namespace ECSystem.Server.Main.Helpers {
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
-            AuthService authService,
             ApplicationDbContext context,
             UserManager<IdentityUser> userManager,
             IUserClaimsPrincipalFactory<IdentityUser> userClaimsPrincipalFactory)
@@ -34,14 +32,12 @@ namespace ECSystem.Server.Main.Helpers {
             this.logger = logger;
             this.encoder = encoder;
             this.clock = clock;
-            this.authService = authService;
             this.context = context;
             this.userManager = userManager;
             this.userClaimsPrincipalFactory = userClaimsPrincipalFactory;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync() {
-            Console.WriteLine("AUTH!");
             // skip authentication if endpoint has [AllowAnonymous] attribute
             var endpoint = Context.GetEndpoint();
             if (endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() != null)
@@ -58,8 +54,10 @@ namespace ECSystem.Server.Main.Helpers {
                 var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
                 var username = credentials[0];
                 var password = credentials[1];
-
+                
                 user = await userManager.FindByNameAsync(username);
+                if(user != null && !await userManager.CheckPasswordAsync(user, password))
+                    user = null;
                 
             } catch {
                 return AuthenticateResult.Fail("Invalid Authorization Header");

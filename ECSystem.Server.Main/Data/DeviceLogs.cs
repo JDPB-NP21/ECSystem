@@ -17,5 +17,6 @@ namespace ECSystem.Server.Main.Data {
 
         [Column(TypeName = "jsonb")]
         public LogInfo Log { get; set; } = default!;
+        //public JsonDocument Log
     }
 }
