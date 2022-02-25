@@ -1,13 +1,25 @@
 syntax = "proto3";
 
+message HelloRequest {
+  string name = 1;
+}
+message HelloReply {
+  string message = 1;
+}
+
 service Greeter {
   rpc SayHello (HelloRequest) returns (HelloReply);
 }
 
-message HelloRequest {
-  string name = 1;
+message TelemetryData {
+  uint32 version = 1;
+  bytes JData = 2;
 }
 
-message HelloReply {
+message TelemetryReplay {
   string message = 1;
+}
+
+service Telemetry {
+  rpc SendTelemetry (TelemetryData) returns (TelemetryReplay);
 }

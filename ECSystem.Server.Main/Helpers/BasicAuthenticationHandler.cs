@@ -41,6 +41,7 @@ namespace ECSystem.Server.Main.Helpers {
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync() {
+            Console.WriteLine("AUTH!");
             // skip authentication if endpoint has [AllowAnonymous] attribute
             var endpoint = Context.GetEndpoint();
             if (endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() != null)

@@ -18,11 +18,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => {
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddAuthentication()
     //.AddJwtBearer(options =>
-    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuth", null);
 
 
 builder.Services.AddGrpc();
@@ -65,9 +66,16 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-//var grpcHost = builder.Configuration.GetValue<string>("GrpcHost") ?? "";
 app.MapGrpcService<GreeterService>();
 app.MapControllers();
 app.MapRazorPages();
+
+
+//After-build/PreStart
+if ((builder.Configuration.GetValue<string>("INITDB")?.Equals("1")).GetValueOrDefault(false)) {
+    Console.WriteLine("InitDb...");
+    Seed.InitDb(app.Services);
+}
+
 
 app.Run();

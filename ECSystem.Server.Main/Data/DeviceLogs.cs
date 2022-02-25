@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ECSystem.Server.Main.Data {
     public class DeviceLogs {
@@ -9,8 +10,12 @@ namespace ECSystem.Server.Main.Data {
 
         public IdentityUser User { get; set; } = default!;
 
-        public DateTime DateTime { get; set; } = default!;
 
-        public string Log { get; set; } = default!;
+        public DateTime FieldDateCreated { get; set; } = default!;
+
+        public uint LogVersion { get; set; } = default!;
+
+        [Column(TypeName = "jsonb")]
+        public LogInfo Log { get; set; } = default!;
     }
 }
