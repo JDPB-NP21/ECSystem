@@ -15,7 +15,7 @@ service Greeter {
 
 ////
 
-message GeoLocation {
+message GrpcLocation {
   double latitude = 1;
   double longitude = 2;
   double height = 3;
@@ -30,7 +30,7 @@ message TelemetryData {
   uint32 version = 1;
   google.protobuf.Timestamp time_stamp = 2;
   string device_id = 3;
-  GeoLocation geo_location = 4;
+  GrpcLocation location = 4;
   WifiInfo connected_wifi = 5;
   repeated WifiInfo list_wifi = 6;
 }

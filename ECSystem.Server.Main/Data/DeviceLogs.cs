@@ -6,6 +6,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ECSystem.Server.Main.Data {
     public class DeviceLogs {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column(TypeName = "bigint")]
         public ulong Id { get; set; } = default!;
 
         public IdentityUser User { get; set; } = default!;

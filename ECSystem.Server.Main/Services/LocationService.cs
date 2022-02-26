@@ -14,10 +14,10 @@ namespace ECSystem.Server.Main.Services {
         }
 
         public async Task<Location> GetLatestPosition(ApplicationDbContext dbContext, IdentityUser user) {
-            List<DeviceLogs> logs = await dbContext.DeviceLogs.AsNoTracking()
+            var log = await dbContext.DeviceLogs.AsNoTracking()
                 .Where(n => n.User.Equals(user))
-                .TakeLast(1)
-                .ToListAsync();
+                .OrderByDescending(s => s.FieldDateCreated)
+                .FirstAsync();
 
             //foreach (var log in logs) {
             //    JObject telm = JObject.Parse(log.Log);
@@ -25,7 +25,7 @@ namespace ECSystem.Server.Main.Services {
             //}
 
 
-            return logs[0].Log.GeoLocation;
+            return log.Log.Location;
         }
     }
 }

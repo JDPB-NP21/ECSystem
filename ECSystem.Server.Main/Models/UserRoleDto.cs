@@ -1,6 +1,6 @@
 ﻿namespace ECSystem.Server.Main.Models {
-    public record struct UserRoleDto {
-        public string UserName { get; set; }
-        public string RoleName { get; set; }
+    public record class UserRoleDto {
+        public string UserName { get; set; } = default!;
+        public string RoleName { get; set; } = default!;
     }
 }

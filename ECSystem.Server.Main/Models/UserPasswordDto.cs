@@ -1,7 +1,7 @@
 ﻿namespace ECSystem.Server.Main.Models {
-    public record struct UserPasswordDto {
-        public string UserName { get; set; }
-        public string Password { get; set; }
+    public record class UserPasswordDto {
+        public string UserName { get; set; } = default!;
+        public string Password { get; set; } = default!;
 
     }
 }

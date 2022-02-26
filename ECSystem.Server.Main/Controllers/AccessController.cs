@@ -1,5 +1,6 @@
 ﻿using ECSystem.Server.Main.Data;
 using ECSystem.Server.Main.Models;
+using ECSystem.Server.Main.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -15,16 +16,19 @@ namespace ECSystem.Server.Main.Controllers {
         private readonly ILogger<AccessController> _logger;
         private readonly UserManager<IdentityUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly LocationService locationService;
 
         public AccessController(ApplicationDbContext dbcontext,
             ILogger<AccessController> logger,
             UserManager<IdentityUser> userManager,
-            RoleManager<IdentityRole> roleManager) {
+            RoleManager<IdentityRole> roleManager,
+            LocationService locationService) {
 
             _dbcontext = dbcontext;
             _logger = logger;
             this.userManager = userManager;
             this.roleManager = roleManager;
+            this.locationService = locationService;
         }
 
 
@@ -33,7 +37,11 @@ namespace ECSystem.Server.Main.Controllers {
 
             _logger.LogInformation(username.ToString());
 
-            return this.Ok(username);
+            var user = await userManager.FindByNameAsync(username);
+
+            var result = await locationService.GetLatestPosition(_dbcontext, user);
+
+            return this.Ok(result);
         }
 
         [HttpGet("users")]

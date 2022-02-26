@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace ECSystem.Server.Main.Controllers {
 
-    [Authorize(AuthenticationSchemes = "BasicAuth", Roles = "Administrator,TelemetryClient")]
+    [Authorize(AuthenticationSchemes = "BasicAuth", Roles = "TelemetryClient")]
     public class TelemetryService : Telemetry.TelemetryBase {
         private readonly ApplicationDbContext dbContext;
         private readonly UserManager<IdentityUser> userManager;
@@ -21,10 +21,10 @@ namespace ECSystem.Server.Main.Controllers {
 
         public async override Task<TelemetryReplay> SendTelemetry(TelemetryData request, ServerCallContext context) {
 
-            var reqLocation = request.GeoLocation;
+            var reqLocation = request.Location;
             var log = new LogInfo() {
                 ConnectedWifi = request.ConnectedWifi.Id,
-                GeoLocation = new Location(reqLocation.Latitude, reqLocation.Longitude, reqLocation.Height),
+                Location = new Location(reqLocation.Latitude, reqLocation.Longitude, reqLocation.Height),
                 ListWifi = request.ListWifi.Select(s => s.Id).ToList(),
             };
 
@@ -33,7 +33,7 @@ namespace ECSystem.Server.Main.Controllers {
 
             var deviceLog = new DeviceLogs() {
                 User = currentUser,
-                FieldDateCreated = DateTime.Now,
+                FieldDateCreated = DateTime.UtcNow,
                 LogVersion = 1,
                 Log = log,
             };
