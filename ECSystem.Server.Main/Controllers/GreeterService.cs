@@ -1,5 +1,6 @@
 ﻿using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
+using TelemetryProto.Messages;
 
 namespace ECSystem.Server.Main.Controllers {
     //[Authorize(Roles = "admin")]

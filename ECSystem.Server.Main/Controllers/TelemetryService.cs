@@ -4,6 +4,7 @@ using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
+using TelemetryProto.Messages;
 
 namespace ECSystem.Server.Main.Controllers {
 
@@ -21,12 +22,20 @@ namespace ECSystem.Server.Main.Controllers {
 
         public async override Task<TelemetryReplay> SendTelemetry(TelemetryData request, ServerCallContext context) {
 
-            var reqLocation = request.Location;
-            var log = new LogInfo() {
-                ConnectedWifi = request.ConnectedWifi.Id,
-                Location = new Location(reqLocation.Latitude, reqLocation.Longitude, reqLocation.Height),
-                ListWifi = request.ListWifi.Select(s => s.Id).ToList(),
-            };
+            LogInfo? log = null;
+
+            try {
+                var reqLocation = request.Location;
+                log = new LogInfo() {
+                    ConnectedWifi = request.ConnectedWifi.Id,
+                    Location = new Models.Location(reqLocation.Latitude, reqLocation.Longitude, reqLocation.Height),
+                    ListWifi = request.ListWifi.Select(s => s.Id).ToList(),
+                };
+            } catch {
+                return new TelemetryReplay {
+                    Message = "Wrong Data request"
+                };
+            }
 
             var currentUserName = context.GetHttpContext().User.Identity?.Name;
             var currentUser = await userManager.FindByNameAsync(currentUserName);
@@ -41,7 +50,7 @@ namespace ECSystem.Server.Main.Controllers {
             await dbContext.DeviceLogs.AddAsync(deviceLog);
             await dbContext.SaveChangesAsync();
 
-            return new TelemetryReplay() {
+            return new TelemetryReplay {
                 Message = "Done"
             };
         }

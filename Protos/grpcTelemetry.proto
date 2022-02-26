@@ -1,6 +1,8 @@
 syntax = "proto3";
 import "google/protobuf/timestamp.proto";
 
+option csharp_namespace = "TelemetryProto.Messages";
+
 
 message HelloRequest {
   string name = 1;
@@ -15,7 +17,7 @@ service Greeter {
 
 ////
 
-message GrpcLocation {
+message Location {
   double latitude = 1;
   double longitude = 2;
   double height = 3;
@@ -30,7 +32,7 @@ message TelemetryData {
   uint32 version = 1;
   google.protobuf.Timestamp time_stamp = 2;
   string device_id = 3;
-  GrpcLocation location = 4;
+  Location location = 4;
   WifiInfo connected_wifi = 5;
   repeated WifiInfo list_wifi = 6;
 }
